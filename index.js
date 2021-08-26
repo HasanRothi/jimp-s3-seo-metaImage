@@ -54,7 +54,7 @@ app.get('/', (req, res) => {
           Key,
           Body: buffer,
           ACL: 'public-read',
-          ContentEncoding: 'base64',
+          // ContentEncoding: 'base64', social share doesn't support base64 encoding image!
           ContentType:'image/jpeg',
         };
         await s3.upload(params, async (err, s3res) => {
@@ -62,7 +62,7 @@ app.get('/', (req, res) => {
             res.status(500).send({ err, status: 'error' });
           }
           //added cloudfront linkto response
-          s3res.cloudFrontLink = AWS_CLOUDFRONT_ENDPOINT + Key
+          s3res.cloudFrontLink = process.env.AWS_CLOUDFRONT_ENDPOINT + Key
           res.status(200).send(s3res)
         });
       });
